@@ -19,7 +19,9 @@
       text-align: center;
       background-color: rgba(255, 255, 255, 0.8);
       background-blend-mode: lighten;
+      overflow: hidden;
     }
+
     h1 {
       color: #d63384;
       font-size: 2rem;
@@ -27,6 +29,7 @@
       padding: 0.5em 1em;
       border-radius: 10px;
     }
+
     p {
       color: #333;
       max-width: 600px;
@@ -36,6 +39,7 @@
       border-radius: 10px;
       margin: 1em 0;
     }
+
     .signature {
       margin-top: 2rem;
       font-weight: bold;
@@ -44,20 +48,24 @@
       padding: 0.5em 1em;
       border-radius: 10px;
     }
+
     .heart {
       font-size: 2rem;
       color: red;
       display: inline-block;
       transition: transform 0.3s;
     }
+
     @keyframes pop {
       0% { transform: scale(1); }
       50% { transform: scale(1.8); }
       100% { transform: scale(1); }
     }
+
     .pop-animation {
       animation: pop 0.4s ease;
     }
+
     .treasure-button {
       margin-top: 2rem;
       padding: 10px 20px;
@@ -69,9 +77,11 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     .treasure-button:hover {
       background-color: #b0256a;
     }
+
     #treasure-message {
       display: none;
       margin-top: 1.5rem;
@@ -81,6 +91,26 @@
       padding: 1em;
       border-radius: 10px;
       max-width: 600px;
+    }
+
+    .floating-heart {
+      position: absolute;
+      color: red;
+      font-size: 1.5rem;
+      animation: floatUp 3s linear forwards;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-150px);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -94,7 +124,7 @@
   </p>
   <div class="signature">With all my heart,<br>-J</div>
 
-  <button class="treasure-button" onclick="showTreasureMessage()">Now let's play a treasure hunt!</button>
+  <button class="treasure-button" onclick="startTreasureHunt()">Now let's play a treasure hunt!</button>
 
   <div id="treasure-message">
     🌸 I have hidden some flowers around my car and my room! If you can find them all, there will be a prize waiting for you. 🌸<br><br>
@@ -103,13 +133,29 @@
   </div>
 
   <script>
-    function showTreasureMessage() {
+    function startTreasureHunt() {
+      // Show treasure message
       document.getElementById('treasure-message').style.display = 'block';
 
+      // Animate heart
       const heart = document.getElementById('heart');
-      heart.classList.remove('pop-animation'); // reset if already applied
-      void heart.offsetWidth; // reflow trick
+      heart.classList.remove('pop-animation');
+      void heart.offsetWidth;
       heart.classList.add('pop-animation');
+
+      // Create floating hearts
+      for (let i = 0; i < 15; i++) {
+        const floatHeart = document.createElement('div');
+        floatHeart.className = 'floating-heart';
+        floatHeart.style.left = Math.random() * 100 + 'vw';
+        floatHeart.style.top = (window.innerHeight - 50) + 'px';
+        floatHeart.textContent = '❤️';
+        document.body.appendChild(floatHeart);
+
+        setTimeout(() => {
+          floatHeart.remove();
+        }, 3000);
+      }
     }
   </script>
 </body>
